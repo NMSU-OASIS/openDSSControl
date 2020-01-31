@@ -1,0 +1,278 @@
+Clear
+Set DefaultBaseFrequency=60
+
+! Note that this is a 3-wire delta system. 
+! Node voltages in OpenDSS are normally line-ground and may give strange-looking results
+! Be careful if you put line-neutral connected loads or other devices on this circuit.
+
+New object=circuit.Ball_State
+~ basekv=30 pu=1.04 MVAsc3=200000 MVAsc1=210000 bus1=SourceBus
+
+! Substation Transformer
+
+new linecode.Elgin basefreq=60 normamps=740 r0=0.676896 r1=0.183744 x0=0.62 x1=0.213104 b0=0.0 b1=0.0 units=mi nphases=3 
+new linecode.Amherst basefreq=60 normamps=310 r0=0.771936 r1=0.48576 x0=1.0 x1=0.228976 b0=0.0 b1=0.0 units=mi nphases=3 
+
+new xfmrcode.Lighting phases=3 windings=2 conns=[delta wye] %r=0.8 xhl=5.654 kvas=[50 50] kvs=[12.47 0.480] %noloadloss=0.1 %loadloss=0.9 maxtap=1.05 mintap=0.9 tap=1 numtaps=6 
+new xfmrcode.xfmr_990kva phases=3 windings=2 conns=[delta wye] %r=0.8 xhl=4.396 kvas=[990 990] kvs=[12.47 0.480] %noloadloss=0.1 %loadloss=0.9 maxtap=1.05 mintap=0.9 tap=1 numtaps=6 
+new xfmrcode.xfmr_400kva phases=3 windings=2 conns=[delta wye] %r=0.77 xhl=4.43 kvas=[400 400] kvs=[12.47 0.480] %noloadloss=0.1325 %loadloss=0.9685 maxtap=1.05 mintap=0.9 tap=1 numtaps=6 
+new xfmrcode.xfmr_630kva phases=3 windings=2 conns=[delta wye] %r=0.79 xhl=4.42 kvas=[630 630] kvs=[12.47 0.480] %noloadloss=0.1187 %loadloss=0.929 maxtap=1.05 mintap=0.9 tap=1 numtaps=6 
+
+New Transformer.SubXF Phases=3 Windings=2 Xhl=5 %LoadLoss=0.01
+~ wdg=1 bus=sourcebus conn=wye kv=30  kva=20000   %r=0.1
+~ wdg=2 bus=substation conn=wye kv=12.47   kva=20000   %r=0.1
+
+New RegControl.Substation  transformer=SubXF winding=2 vreg=122 ptratio=60 maxtapchange=1
+
+New Line.L1 Bus1=substation Bus2=johnson_dr_parking_entarnce Length=364 Units=ft LineCode=Elgin 
+New Line.L2 Bus1=johnson_dr_parking_entarnce Bus2=johnson_dr_parking_end Length=329 Units=ft LineCode=Amherst 
+New Line.L3 Bus1=johnson_dr_parking_entarnce Bus2=2000_W_University_Ave Length=208 Units=ft LineCode=Elgin 
+New Line.L4 Bus1=2000_W_University_Ave Bus2=Carmichael_Hall_1 Length=260 Units=ft LineCode=Amherst 
+New Line.L5 Bus1=Carmichael_Hall_1 Bus2=Carmichael_Hall_2 Length=81 Units=ft LineCode=Amherst 
+New Line.L6 Bus1=2000_W_University_Ave Bus2=Schmidt_Wilson_Hall_1 Length=295 Units=ft LineCode=Elgin 
+New Line.L7 Bus1=Schmidt_Wilson_Hall_1 Bus2=Schmidt_Wilson_Hall_2 Length=41 Units=ft LineCode=Amherst 
+New Line.L8 Bus1=Schmidt_Wilson_Hall_1 Bus2=Johnson_complex Length=372 Units=ft LineCode=Elgin 
+New Line.L9 Bus1=Johnson_complex Bus2=Johnson__McKenley_Avn_1 Length=369 Units=ft LineCode=Amherst 
+New Line.L10 Bus1=Johnson__McKenley_Avn_1 Bus2=McKenley_Avn_1 Length=354 Units=ft LineCode=Elgin 
+New Line.L11 Bus1=McKenley_Avn_1 Bus2=McKenley_Circle Length=106 Units=ft LineCode=Amherst 
+New Line.L12 Bus1=McKenley_Circle Bus2=Parking_C1_1 Length=169 Units=ft LineCode=Amherst 
+New Line.L13 Bus1=McKenley_Avn_1 Bus2=McKenley_Avn_2 Length=380 Units=ft LineCode=Amherst 
+New Line.L14 Bus1=McKenley_Avn_2 Bus2=Parking_C1_2 Length=341 Units=ft LineCode=Amherst 
+New Line.L15 Bus1=Parking_C1_2 Bus2=Tennis_courts Length=159 Units=ft LineCode=Amherst 
+New Line.L16 Bus1=McKenley_Circle Bus2=Parking_G2N_1 Length=304 Units=ft LineCode=Amherst 
+New Line.L17 Bus1=Parking_G2N_1 Bus2=Parking_G2N_2 Length=506 Units=ft LineCode=Amherst 
+New Line.L18 Bus1=Parking_G2N_2 Bus2=Parking_G2_1 Length=246 Units=ft LineCode=Amherst 
+New Line.L19 Bus1=Parking_G2_1 Bus2=Parking_G2_2 Length=202 Units=ft LineCode=Amherst 
+New Line.L20 Bus1=Parking_G2_1 Bus2=Parking_G2_3 Length=308 Units=ft LineCode=Amherst 
+New Line.L21 Bus1=Parking_G2_3 Bus2=Parking_H7_2 Length=380 Units=ft LineCode=Amherst 
+New Line.L22 Bus1=Parking_G2_2 Bus2=Parking_H7_1 Length=548 Units=ft LineCode=Amherst 
+New Line.L23 Bus1=Parking_G2_2 Bus2=Worthen_arena Length=334 Units=ft LineCode=Amherst 
+New Line.L24 Bus1=Johnson__McKenley_Avn_1 Bus2=Hurst_hall_1 Length=319 Units=ft LineCode=Elgin 
+New Line.L25 Bus1=Hurst_hall_1 Bus2=Hurst_hall_2 Length=117 Units=ft LineCode=Amherst 
+New Line.L26 Bus1=Hurst_hall_1 Bus2=Parking_R2_1 Length=547 Units=ft LineCode=Elgin 
+New Line.L27 Bus1=Parking_R2_1 Bus2=Parking_R2_2 Length=422 Units=ft LineCode=Amherst 
+New Line.L28 Bus1=Parking_R2_1 Bus2=W_Pettty_Rd_1 Length=191 Units=ft LineCode=Elgin 
+New Line.L29 Bus1=W_Pettty_Rd_1 Bus2=Robert_bell_building_1 Length=161 Units=ft LineCode=Amherst 
+New Line.L30 Bus1=Robert_bell_building_1 Bus2=Robert_bell_building_2 Length=59 Units=ft LineCode=Amherst 
+New Line.L31 Bus1=Robert_bell_building_1 Bus2=Coll_of_comm_1 Length=213 Units=ft LineCode=Amherst 
+New Line.L32 Bus1=Coll_of_comm_1 Bus2=Coll_of_comm_2 Length=71 Units=ft LineCode=Amherst 
+New Line.L33 Bus1=Coll_of_comm_1 Bus2=Telecomms_1 Length=219 Units=ft LineCode=Amherst 
+New Line.L34 Bus1=Telecomms_1 Bus2=Telecomms_2 Length=93 Units=ft LineCode=Amherst 
+New Line.L35 Bus1=Telecomms_1 Bus2=Journalism Length=345 Units=ft LineCode=Amherst 
+New Line.L36 Bus1=Journalism Bus2=Teachers_college Length=398 Units=ft LineCode=Amherst 
+New Line.L37 Bus1=Teachers_college Bus2=McKenley_Avn_3 Length=387 Units=ft LineCode=Amherst 
+New Line.L38 Bus1=McKenley_Avn_3 Bus2=North_Quadrangle_Building Length=222 Units=ft LineCode=Amherst 
+New Line.L39 Bus1=North_Quadrangle_Building Bus2=Art_museum Length=438 Units=ft LineCode=Amherst 
+New Line.L40 Bus1=Art_museum Bus2=Science_building Length=368 Units=ft LineCode=Amherst 
+New Line.L41 Bus1=Science_building Bus2=River_side_avn Length=250 Units=ft LineCode=Amherst 
+New Line.L42 Bus1=River_side_avn Bus2=Ball_Gym Length=227 Units=ft LineCode=Amherst 
+New Line.L43 Bus1=McKenley_Avn_3 Bus2=Richard_W_Burkhardt_Building Length=494 Units=ft LineCode=Amherst 
+New Line.L44 Bus1=Richard_W_Burkhardt_Building Bus2=University_avn_1 Length=401 Units=ft LineCode=Amherst 
+New Line.L45 Bus1=University_avn_1 Bus2=Admin_building_1 Length=298 Units=ft LineCode=Amherst 
+New Line.L46 Bus1=Admin_building_1 Bus2=Admin_building_2 Length=137 Units=ft LineCode=Amherst 
+New Line.L47 Bus1=Admin_building_1 Bus2=Welcome_center_1 Length=573 Units=ft LineCode=Amherst 
+New Line.L48 Bus1=Welcome_center_1 Bus2=Welcome_center_2 Length=105 Units=ft LineCode=Amherst 
+New Line.L49 Bus1=Welcome_center_1 Bus2=Parking_G15 Length=645 Units=ft LineCode=Amherst 
+New Line.L50 Bus1=Parking_G15 Bus2=Grounds_building Length=253 Units=ft LineCode=Amherst 
+New Line.L51 Bus1=Grounds_building Bus2=Tessis_courts_2 Length=205 Units=ft LineCode=Amherst 
+New Line.L52 Bus1=Grounds_building Bus2=West_Quadrangle_Building Length=81 Units=ft LineCode=Amherst 
+New Line.L53 Bus1=University_avn_1 Bus2=McKenley_Avn_4 Length=360 Units=ft LineCode=Amherst 
+New Line.L54 Bus1=McKenley_Avn_4 Bus2=Student_center Length=220 Units=ft LineCode=Amherst 
+New Line.L55 Bus1=Richard_W_Burkhardt_Building Bus2=McKinley_structure Length=126 Units=ft LineCode=Amherst 
+New Line.L56 Bus1=McKenley_Avn_3 Bus2=River_side_avn_2 Length=240 Units=ft LineCode=Amherst 
+New Line.L57 Bus1=River_side_avn_2 Bus2=Music_hall Length=77 Units=ft LineCode=Amherst 
+New Line.L58 Bus1=River_side_avn_2 Bus2=River_side_avn_3 Length=54 Units=ft LineCode=Amherst 
+New Line.L59 Bus1=River_side_avn_3 Bus2=River_side_avn_4 Length=1008 Units=ft LineCode=Amherst 
+New Line.L60 Bus1=River_side_avn_4 Bus2=Dehority_complex Length=96 Units=ft LineCode=Amherst 
+New Line.L61 Bus1=W_Pettty_Rd_1 Bus2=Student_recreation Length=443 Units=ft LineCode=Amherst 
+New Line.L62 Bus1=Student_recreation Bus2=Neely_avn_1 Length=242 Units=ft LineCode=Amherst 
+New Line.L63 Bus1=Student_recreation Bus2=IDIA_lab Length=82 Units=ft LineCode=Amherst 
+New Line.L64 Bus1=Neely_avn_1 Bus2=Neely_avn_2 Length=261 Units=ft LineCode=Amherst 
+New Line.L65 Bus1=Neely_avn_2 Bus2=Parking_R5_1 Length=90 Units=ft LineCode=Amherst 
+New Line.L66 Bus1=Parking_R5_1 Bus2=Parking_R5_2 Length=110 Units=ft LineCode=Amherst 
+New Line.L67 Bus1=Parking_R5_1 Bus2=Noyer_dr_1 Length=183 Units=ft LineCode=Amherst 
+New Line.L68 Bus1=Noyer_dr_1 Bus2=Noyer_complex Length=264 Units=ft LineCode=Amherst 
+New Line.L69 Bus1=Noyer_complex Bus2=Noyer_dr_2 Length=285 Units=ft LineCode=Amherst 
+New Line.L70 Bus1=Noyer_dr_2 Bus2=Park_hall Length=68 Units=ft LineCode=Amherst 
+New Line.L71 Bus1=Noyer_dr_2 Bus2=Emens_structure Length=115 Units=ft LineCode=Amherst 
+New Line.L72 Bus1=Emens_structure Bus2=Noyer_dr_3 Length=335 Units=ft LineCode=Amherst 
+New Line.L73 Bus1=Noyer_dr_3 Bus2=Library Length=252 Units=ft LineCode=Amherst 
+New Line.L74 Bus1=Noyer_dr_3 Bus2=Parking_P9 Length=291 Units=ft LineCode=Amherst 
+New Line.L75 Bus1=Parking_P9 Bus2=Woodworth_complex Length=127 Units=ft LineCode=Amherst 
+New Line.L76 Bus1=Parking_R5_2 Bus2=Business_College Length=329 Units=ft LineCode=Amherst 
+New Line.L77 Bus1=Noyer_dr_1 Bus2=Noyer_dr_4 Length=228 Units=ft LineCode=Amherst 
+New Line.L78 Bus1=Noyer_dr_4 Bus2=Noyer_dr_5 Length=304 Units=ft LineCode=Amherst 
+New Line.L79 Bus1=Noyer_dr_5 Bus2=Noyer_dr_6 Length=275 Units=ft LineCode=Amherst 
+New Line.L80 Bus1=Noyer_dr_6 Bus2=Studebaker_East Length=144 Units=ft LineCode=Amherst 
+New Line.L81 Bus1=Noyer_dr_4 Bus2=Health_center Length=93 Units=ft LineCode=Amherst 
+New Line.L82 Bus1=Noyer_dr_5 Bus2=Micro_cafe Length=86 Units=ft LineCode=Amherst 
+New Line.L83 Bus1=Noyer_dr_5 Bus2=Food_shop Length=54 Units=ft LineCode=Amherst 
+
+new Transformer.Tr1 buses=[johnson_dr_parking_entarnce johnson_dr_parking_entarnce_LV] xfmrcode=Lighting
+new Transformer.Tr2 buses=[johnson_dr_parking_end johnson_dr_parking_end_LV] xfmrcode=Lighting
+new Transformer.Tr3 buses=[Parking_C1_2 Parking_C1_2_LV] xfmrcode=Lighting
+new Transformer.Tr4 buses=[Parking_C1_1 Parking_C1_1_LV] xfmrcode=Lighting
+new Transformer.Tr5 buses=[Tennis_courts Tennis_courts_LV] xfmrcode=Lighting
+new Transformer.Tr6 buses=[Parking_G2N_1 Parking_G2N_1_LV] xfmrcode=Lighting
+new Transformer.Tr7 buses=[Parking_G2N_2 Parking_G2N_2_LV] xfmrcode=Lighting
+new Transformer.Tr8 buses=[Parking_G2_2 Parking_G2_2_LV] xfmrcode=Lighting
+new Transformer.Tr9 buses=[Parking_G2_3 Parking_G2_3_LV] xfmrcode=Lighting
+new Transformer.Tr10 buses=[Parking_H7_2 Parking_H7_2_LV] xfmrcode=Lighting
+new Transformer.Tr11 buses=[Parking_H7_1 Parking_H7_1_LV] xfmrcode=Lighting
+new Transformer.Tr12 buses=[Parking_R2_1 Parking_R2_1_LV] xfmrcode=Lighting
+new Transformer.Tr13 buses=[Parking_R2_2 Parking_R2_2_LV] xfmrcode=Lighting
+new Transformer.Tr14 buses=[McKenley_Avn_4 McKenley_Avn_4_LV] xfmrcode=Lighting
+new Transformer.Tr15 buses=[Parking_R5_2 Parking_R5_2_LV] xfmrcode=Lighting
+new Transformer.Tr17 buses=[Schmidt_Wilson_Hall_2 Schmidt_Wilson_Hall_2_LV] xfmrcode=xfmr_630kVA
+new Transformer.Tr18 buses=[Carmichael_Hall_2 Carmichael_Hall_2_LV] xfmrcode=xfmr_630kVA
+new Transformer.Tr19 buses=[Johnson_complex Johnson_complex_LV] xfmrcode=xfmr_630kVA
+new Transformer.Tr20 buses=[Worthen_arena Worthen_arena_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr21 buses=[Hurst_hall_2 Hurst_hall_2_LV] xfmrcode=xfmr_400kVA
+
+new Transformer.Tr22 buses=[Robert_bell_building_2 Robert_bell_building_2_LV] xfmrcode=xfmr_630kVA
+new Transformer.Tr23 buses=[Coll_of_comm_2 Coll_of_comm_2_LV] xfmrcode=xfmr_630kVA
+new Transformer.Tr24 buses=[Telecomms_2 Telecomms_2_LV] xfmrcode=xfmr_630kVA
+new Transformer.Tr25 buses=[Journalism Journalism_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr26 buses=[Teachers_college Teachers_college_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr27 buses=[North_Quadrangle_Building North_Quadrangle_Building_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr28 buses=[Art_museum Art_museum_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr29 buses=[Science_building Science_building_LV] xfmrcode=xfmr_990kVA
+new Transformer.Tr30 buses=[Ball_Gym Ball_Gym_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr31 buses=[Richard_W_Burkhardt_Building Richard_W_Burkhardt_Building_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr32 buses=[McKinley_structure McKinley_structure_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr33 buses=[Admin_building_2 Admin_building_2_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr34 buses=[Welcome_center_2 Welcome_center_2_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr35 buses=[Grounds_building Grounds_building_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr36 buses=[Tessis_courts_2 Tessis_courts_2_LV] xfmrcode=Lighting
+new Transformer.Tr37 buses=[West_Quadrangle_Building West_Quadrangle_Building_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr38 buses=[Student_center Student_center_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr39 buses=[Music_hall Music_hall_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr40 buses=[Dehority_complex Dehority_complex_LV] xfmrcode=xfmr_630kVA
+new Transformer.Tr41 buses=[IDIA_lab IDIA_lab_LV] xfmrcode=xfmr_990kVA
+new Transformer.Tr42 buses=[Business_College Business_College_LV] xfmrcode=xfmr_990kVA
+new Transformer.Tr43 buses=[Noyer_complex Noyer_complex_LV] xfmrcode=xfmr_990kVA
+new Transformer.Tr44 buses=[Park_hall Park_hall_LV] xfmrcode=xfmr_990kVA
+new Transformer.Tr45 buses=[Emens_structure Emens_structure_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr46 buses=[Woodworth_complex Woodworth_complex_LV] xfmrcode=xfmr_630kVA
+new Transformer.Tr47 buses=[Health_center Health_center_LV] xfmrcode=xfmr_630kVA
+new Transformer.Tr48 buses=[Studebaker_East Studebaker_East_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr49 buses=[Micro_cafe Micro_cafe_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr50 buses=[Library Library_LV] xfmrcode=xfmr_400kVA
+new Transformer.Tr51 buses=[Student_recreation Student_recreation_LV] xfmrcode=xfmr_990kVA
+
+!! profiles
+new loadshape.Building1 npts=35033 minterval=15  mult=(File=Building_1.csv) 
+new loadshape.Building2 npts=35033 minterval=15  mult=(File=Building_2.csv) 
+new loadshape.Building3 npts=35033 minterval=15  mult=(File=Building_3.csv) 
+new loadshape.Building4 npts=35033 minterval=15  mult=(File=Building_4.csv) 
+new loadshape.Building5 npts=35033 minterval=15  mult=(File=Building_5.csv) 
+new loadshape.Building6 npts=35033 minterval=15  mult=(File=Building_7.csv) 
+new loadshape.Building7 npts=35033 minterval=15  mult=(File=Building_8.csv) 
+new loadshape.Building8 npts=35033 minterval=15  mult=(File=Building_10.csv) 
+new loadshape.Building9 npts=35033 minterval=15  mult=(File=Building_12.csv) 
+new loadshape.Building10 npts=35033 minterval=15  mult=(File=Building_13.csv) 
+new loadshape.Building11 npts=35033 minterval=15  mult=(File=Building_14.csv) 
+new loadshape.Building12 npts=35033 minterval=15  mult=(File=Building_15.csv) 
+new loadshape.Building13 npts=35033 minterval=15  mult=(File=Building_16.csv) 
+new loadshape.Building14 npts=35033 minterval=15  mult=(File=Building_17.csv) 
+new loadshape.Building15 npts=35033 minterval=15  mult=(File=Building_18.csv) 
+new loadshape.Building16 npts=35033 minterval=15  mult=(File=Building_21.csv) 
+new loadshape.Building17 npts=35033 minterval=15  mult=(File=Building_23.csv) 
+new loadshape.Building18 npts=35033 minterval=15  mult=(File=Building_24.csv) 
+new loadshape.Building19 npts=35033 minterval=15  mult=(File=Building_25.csv) 
+new loadshape.Building20 npts=35033 minterval=15  mult=(File=Building_26.csv) 
+new loadshape.Building21 npts=35033 minterval=15  mult=(File=Building_27.csv) 
+new loadshape.Building22 npts=35033 minterval=15  mult=(File=Building_28.csv) 
+new loadshape.Building23 npts=35033 minterval=15  mult=(File=Building_30.csv) 
+
+new loadshape.Lighting1 npts=35033 minterval=15  mult=(File=Lighting_1.csv) 
+new loadshape.Lighting2 npts=35033 minterval=15  mult=(File=Lighting_2.csv) 
+new loadshape.Lighting3 npts=35033 minterval=15  mult=(File=Lighting_3.csv) 
+new loadshape.Lighting4 npts=35033 minterval=15  mult=(File=Lighting_4.csv) 
+new loadshape.Lighting5 npts=35033 minterval=15  mult=(File=Lighting_5.csv) 
+new loadshape.Lighting6 npts=35033 minterval=15  mult=(File=Lighting_6.csv) 
+new loadshape.Lighting7 npts=35033 minterval=15  mult=(File=Lighting_7.csv) 
+
+
+! Lighting loads
+new Load.Load_1 bus1=johnson_dr_parking_entarnce_LV model=1 kW=8.35 pf=0.98 Phases=3 kV=0.480 yearly=Lighting1 
+new Load.Load_2 bus1=johnson_dr_parking_end_LV model=1 kW=8.35 pf=0.98 Phases=3 kV=0.480 yearly=Lighting2
+new Load.Load_3 bus1=Parking_C1_2_LV model=1 kW=9.3 pf=0.98 Phases=3 kV=0.480 yearly=Lighting3
+new Load.Load_4 bus1=Parking_C1_1_LV model=1 kW=9.3 pf=0.98 Phases=3 kV=0.480 yearly=Lighting4
+new Load.Load_5 bus1=Tennis_courts_LV model=1 kW=5.3 pf=0.98 Phases=3 kV=0.480 yearly=Lighting5
+new Load.Load_6 bus1=Parking_G2N_1_LV model=1 kW=17.2 pf=0.98 Phases=3 kV=0.480 yearly=Lighting6
+new Load.Load_7 bus1=Parking_G2N_2_LV model=1 kW=17.2 pf=0.958 Phases=3 kV=0.480 yearly=Lighting7
+new Load.Load_8 bus1=Parking_G2_2_LV model=1 kW=9.6 pf=0.98 Phases=3 kV=0.480 yearly=Lighting1
+new Load.Load_9 bus1=Parking_G2_3_LV model=1 kW=9.6 pf=0.98 Phases=3 kV=0.480 yearly=Lighting2
+new Load.Load_10 bus1=Parking_H7_2_LV model=1 kW=5.27 pf=0.98 Phases=3 kV=0.480 yearly=Lighting3
+new Load.Load_11 bus1=Parking_H7_1_LV model=1 kW=5.27 pf=0.98 Phases=3 kV=0.480 yearly=Lighting4
+new Load.Load_12 bus1=Parking_R2_1_LV model=1 kW=12.3 pf=0.98 Phases=3 kV=0.480 yearly=Lighting5
+new Load.Load_13 bus1=Parking_R2_2_LV model=1 kW=12.3 pf=0.98 Phases=3 kV=0.480 yearly=Lighting6
+new Load.Load_14 bus1=McKenley_Avn_4_LV model=1 kW=6.12 pf=0.98 Phases=3 kV=0.480 yearly=Lighting7
+new Load.Load_15 bus1=Parking_R5_2_LV model=1 kW=7.75 pf=0.98 Phases=3 kV=0.480 yearly=Lighting1
+new Load.Load_35 bus1=Tessis_courts_2_LV model=1 kW=1 pf=0.95 Phases=3 kV=0.480 yearly=Lighting2
+! Bulding loads      
+
+new Load.Load_16 bus1=Schmidt_Wilson_Hall_2_LV model=1 kW=532 pf=0.95 Phases=3 kV=0.480 yearly=Building1
+new Load.Load_17 bus1=Carmichael_Hall_2_LV model=1 kW=470 pf=0.95 Phases=3 kV=0.480 yearly=Building2
+new Load.Load_18 bus1=Johnson_complex_LV model=1 kW=610 pf=0.95 Phases=3 kV=0.480 yearly=Building3
+new Load.Load_19 bus1=Worthen_arena_LV model=1 kW=360 pf=0.95 Phases=3 kV=0.480 yearly=Building4
+new Load.Load_20 bus1=Hurst_hall_2_LV model=1 kW=332 pf=0.95 Phases=3 kV=0.480 yearly=Building5
+new Load.Load_21 bus1=Robert_bell_building_2_LV model=540 kW=560 pf=0.95 Phases=3 kV=0.480 yearly=Building6
+new Load.Load_22 bus1=Coll_of_comm_2_LV model=1 kW=445 pf=0.95 Phases=3 kV=0.480 yearly=Building7
+new Load.Load_23 bus1=Telecomms_2_LV model=1 kW=527 pf=0.95 Phases=3 kV=0.480 yearly=Building8
+new Load.Load_24 bus1=Journalism_LV model=1 kW=362 pf=0.95 Phases=3 kV=0.480 yearly=Building9
+new Load.Load_25 bus1=Teachers_college_LV model=175 kW=1 pf=0.95 Phases=3 kV=0.480 yearly=Building10
+new Load.Load_26 bus1=North_Quadrangle_Building_LV model=163 kW=1 pf=0.95 Phases=3 kV=0.480 yearly=Building11
+new Load.Load_27 bus1=Art_museum_LV model=1 kW=154 pf=0.95 Phases=3 kV=0.480 yearly=Building12
+new Load.Load_28 bus1=Science_building_LV model=1 kW=683 pf=0.95 Phases=3 kV=0.480 yearly=Building13
+new Load.Load_29 bus1=Ball_Gym_LV model=1 kW=259 pf=0.95 Phases=3 kV=0.480 yearly=Building14
+new Load.Load_30 bus1=Richard_W_Burkhardt_Building_LV model=1 kW=197 pf=0.95 Phases=3 kV=0.480 yearly=Building15
+new Load.Load_31 bus1=McKinley_structure_LV model=1 kW=336 pf=0.95 Phases=3 kV=0.480 yearly=Building16
+new Load.Load_32 bus1=Admin_building_2_LV model=1 kW=98 pf=0.95 Phases=3 kV=0.480 yearly=Building17
+new Load.Load_33 bus1=Welcome_center_2_LV model=1 kW=54 pf=0.95 Phases=3 kV=0.480 yearly=Building18
+new Load.Load_34 bus1=Grounds_building_LV model=1 kW=47 pf=0.95 Phases=3 kV=0.480 yearly=Building19
+new Load.Load_36 bus1=West_Quadrangle_Building_LV model=1 kW=342 pf=0.95 Phases=3 kV=0.480 yearly=Building21
+new Load.Load_37 bus1=Student_center_LV model=1 kW=176 pf=0.95 Phases=3 kV=0.480 yearly=Building22
+new Load.Load_38 bus1=Music_hall_LV model=1 kW=157 pf=0.95 Phases=3 kV=0.480 yearly=Building23
+new Load.Load_39 bus1=Dehority_complex_LV model=1 kW=496 pf=0.95 Phases=3 kV=0.480 yearly=Building1
+new Load.Load_40 bus1=IDIA_lab_LV model=1 kW=675 pf=0.95 Phases=3 kV=0.480 yearly=Building2
+new Load.Load_41 bus1=Business_College_LV model=1 kW=636.2 pf=0.95 Phases=3 kV=0.480 yearly=Building3
+new Load.Load_42 bus1=Noyer_complex_LV model=1 kW=804 pf=0.95 Phases=3 kV=0.480 yearly=Building4
+new Load.Load_43 bus1=Park_hall_LV model=1 kW=763 pf=0.95 Phases=3 kV=0.480 yearly=Building5
+new Load.Load_44 bus1=Emens_structure_LV model=1 kW=101 pf=0.95 Phases=3 kV=0.480 yearly=Building6
+new Load.Load_45 bus1=Woodworth_complex_LV model=1 kW=579 pf=0.95 Phases=3 kV=0.480 yearly=Building7
+new Load.Load_46 bus1=Health_center_LV model=1 kW=485 pf=0.95 Phases=3 kV=0.480 yearly=Building8
+new Load.Load_47 bus1=Studebaker_East_LV model=1 kW=365 pf=0.95 Phases=3 kV=0.480 yearly=Building9
+new Load.Load_48 bus1=Micro_cafe_LV model=1 kW=319 pf=0.95 Phases=3 kV=0.480 yearly=Building10
+new Load.Load_49 bus1=Library_LV model=1 kW=380 pf=0.95 Phases=3 kV=0.480 yearly=Building11
+new Load.Load_50 bus1=Student_recreation_LV model=1 kW=990.7 pf=0.95 Phases=3 kV=0.480 yearly=Building12
+
+New EnergyMeter.SubXF Transformer.SubXF
+Set Voltagebases=[30, 12.47, 0.48]
+CalcVoltageBases
+BusCoords Coordinates.csv
+
+solve mode=direct
+set maxiterations=100
+solve
+
+plot profile
+plot circuit
+
+New monitor.MPCC1 element=Line.L1 mode=0
+New monitor.MPCC2 element=Line.L83 mode=0
+New monitor.MPCC3 element=Line.L1 mode=1
+New monitor.MPCC4 element=Line.L83 mode=1
+
+set controlmode=time
+set mode=yearly
+Set overloadreport=true  ! TURN OVERLOAD REPORT ON
+Set voltexcept=true
+set demand=true
+set DIVerbose=true
+
+set stepsize = 15m
+Set Year=1 Number= 35040
+
+solve 

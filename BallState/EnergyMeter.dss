@@ -1,0 +1,4 @@
+New EnergyMeter.SubXF Transformer.SubXF
+Set Voltagebases=[30, 12.47, 0.48]
+CalcVoltageBases
+BusCoords Coordinates.csv

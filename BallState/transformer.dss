@@ -1,0 +1,3 @@
+New Transformer.SubXF Phases=3 Windings=2 Xhl=5 %LoadLoss=0.01
+~ wdg=1 bus=sourcebus conn=wye kv=30  kva=20000   %r=0.1
+~ wdg=2 bus=substation conn=wye kv=12.47   kva=20000   %r=0.1

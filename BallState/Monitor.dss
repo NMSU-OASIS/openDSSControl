@@ -1,0 +1,4 @@
+New monitor.MPCC1 element=Line.L1 mode=0
+New monitor.MPCC2 element=Line.L83 mode=0
+New monitor.MPCC3 element=Line.L1 mode=1
+New monitor.MPCC4 element=Line.L83 mode=1

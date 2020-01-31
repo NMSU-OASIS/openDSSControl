@@ -1,0 +1,4 @@
+new xfmrcode.Lighting phases=3 windings=2 conns=[delta wye] %r=0.8 xhl=5.654 kvas=[50 50] kvs=[12.47 0.480] %noloadloss=0.1 %loadloss=0.9 maxtap=1.05 mintap=0.9 tap=1 numtaps=6 
+new xfmrcode.xfmr_990kva phases=3 windings=2 conns=[delta wye] %r=0.8 xhl=4.396 kvas=[990 990] kvs=[12.47 0.480] %noloadloss=0.1 %loadloss=0.9 maxtap=1.05 mintap=0.9 tap=1 numtaps=6 
+new xfmrcode.xfmr_400kva phases=3 windings=2 conns=[delta wye] %r=0.77 xhl=4.43 kvas=[400 400] kvs=[12.47 0.480] %noloadloss=0.1325 %loadloss=0.9685 maxtap=1.05 mintap=0.9 tap=1 numtaps=6 
+new xfmrcode.xfmr_630kva phases=3 windings=2 conns=[delta wye] %r=0.79 xhl=4.42 kvas=[630 630] kvs=[12.47 0.480] %noloadloss=0.1187 %loadloss=0.929 maxtap=1.05 mintap=0.9 tap=1 numtaps=6 

@@ -1,0 +1,47 @@
+Clear
+Set DefaultBaseFrequency=60
+
+! Note that this is a 3-wire delta system. 
+! Node voltages in OpenDSS are normally line-ground and may give strange-looking results
+! Be careful if you put line-neutral connected loads or other devices on this circuit.
+
+Redirect object.dss
+
+! Substation Transformer
+
+Redirect linecode.dss
+Redirect xfmrcode.dss
+Redirect transformer.dss
+Redirect RegControl.dss
+Redirect NewLine.dss
+Redirect NewTransformer.dss
+
+!! profiles
+
+Redirect NewLoadshape.dss
+
+! Lighting loads
+
+Redirect NewLoadLoad.dss
+Redirect EnergyMeter.dss
+
+set mode=yearly
+set maxiterations=100
+solve
+
+plot profile
+plot circuit
+
+Redirect Monitor.dss
+
+set controlmode=time
+set mode=yearly
+Set overloadreport=true  ! TURN OVERLOAD REPORT ON
+Set voltexcept=true
+set demand=true
+set DIVerbose=true
+
+set stepsize = 15m
+Set Year=1 Number= 35040
+
+solve 
