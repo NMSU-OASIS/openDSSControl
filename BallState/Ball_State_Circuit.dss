@@ -269,9 +269,9 @@ set stepsize = 15m
 Set Year=1 Number= 35040
 
 !New monitor.subVI element=Transformer.SubXF terminal=2 mode=0
-New PVSystem.Telecomms phases=3 bus1=Telecomms_2_LV 
-New monitor.subPQ element=Transformer.SubXF terminal=1 mode=65 PPolar=No
-solve
+!New PVSystem.Telecomms phases=3 bus1=Telecomms_2_LV 
+!New monitor.subPQ element=Transformer.SubXF terminal=1 mode=65 PPolar=No
+!solve
 !export monitor object=monitor.SubVI
-export monitor object=SubPQ
-closedi
+!export monitor object=SubPQ
+!closedi

@@ -324,7 +324,7 @@ Set DIVerbose=true
 
 
 solve mode=direct
-plot profile
+!plot profile
 plot circuit
 solve mode = yearly
 plot monitor object=SubVI channels = (1,3,5)
@@ -343,8 +343,8 @@ New PVSystem.Telecomms phases=3 bus1=Telecomms_2_LV kV=0.480 kVA=343.8 Pmpp=275.
 New PVSystem.Noyer phases=3 bus1=Noyer_complex_LV kV=.480 kVA=124.8 Pmpp=99.84 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=PV_Shape
 New PVSystem.Robert_Bell phases=3 bus1=Robert_bell_building_2_LV kV=0.480 kVA=162.4 irradiance=1 Pmpp=129.92 pf=1 %cutin=0.1 %cutout=0.1 Yearly=PV_Shape
 New PVSystem.Library phases=3 bus1=Library_LV kV=0.480 kVA=108 irradiance=1 Pmpp=86.4 pf=1 %cutin=0.1 %cutout=0.1 Yearly=PV_Shape
-! Missing Whittinger building?
-! How to connect cardinal ground mount?
+New PVSystem.Business_College phases=3 bus1=Business_College_LV kV=0.480 kVA=163.2 irradiance=1 Pmpp=130.56 pf=1 %cutin=0.1 %cutout=0.1 Yearly=PV_Shape
+New PVSystem.Johnson_complex phases=3 bus1=Johnson_complex_LV kV=0.480 kVA=400 irradiance=1 Pmpp=400 pf=1 %cutin=0.1 %cutout=0.1 Yearly=PV_Shape
 
 
 
@@ -360,7 +360,7 @@ plot circuit
 solve mode = yearly
 plot monitor object=SubVI channels = (1,3,5)
 plot monitor object =SubPQ channels =(1,2)
-
+closedi
 !!!! add battery storage systems below
 
 

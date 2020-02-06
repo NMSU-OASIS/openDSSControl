@@ -30,10 +30,10 @@ if __name__ == '__main__':
 
     # Load the buildings into building objects !! Needs to point to your file
     print('Loading the building solar information...')
-    buildings = pickle.load(open(path + 'buildings.p', 'rb'))
+    buildings = pickle.load(open(path + 'buildings.pickle', 'rb'))
     building_list = []
     for building in buildings.keys():
-        building_list.append(Building(buildings[building]['kVA_max'], buildings[building]['Name'],
+        building_list.append(Building(int(buildings[building]['kVA_max']), buildings[building]['Name'],
                                       buildings[building]['bus1']))
 
     # Loop through loading the buildings and printing the outputs
