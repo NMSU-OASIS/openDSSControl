@@ -5,7 +5,7 @@ Xlabel, "X"
 Ylabel, "Y"
 TxtAlign, 1
 KeyClass, 1
-ChartCaption, "Ball_State:Power, max=1.1E004"
+ChartCaption, "Ball_State:Power, max=1.14E004"
 Line, "Line.l1", "substation", "johnson_dr_parking_entarnce", 0, 6,  0, 50, 7.1995579, 0, -85.414, 40.20775, -85.4127, 40.2077, 16711680, 5, 0, 0, 0, 0, 24, 1
 Line, "Line.l2", "johnson_dr_parking_entarnce", "johnson_dr_parking_end", 192, 6,  0, 1, 7.1995579, 0.1109472, -85.4127, 40.2077, -85.4127, 40.20855, 16711680, 1, 0, 0, 0, 0, 24, 1
 Line, "Line.l3", "johnson_dr_parking_entarnce", "2000_w_university_ave", 384, 6,  0, 48, 7.1995579, 0.1109472, -85.4127, 40.2077, -85.41195, 40.20766, 16711680, 5, 0, 0, 0, 0, 24, 1
@@ -104,7 +104,6 @@ Marker, -85.40464, 40.20348,  255, 15, 1
 Marker, -85.40836, 40.20445,  255, 15, 1
 Marker, -85.40656, 40.20219,  255, 15, 1
 Marker, -85.40639, 40.20391,  255, 15, 1
-Marker, -85.40956, 40.20769,  255, 15, 1
 Range, -85.41782, -85.3977, 40.196482, 40.209895
 SetProp, -85.41782, -85.39770025, 40.196482, 40.209895, 16777215, 16777215, 1, 0
 KeepAspect, 1
