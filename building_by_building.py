@@ -1,17 +1,17 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Randall Woodall
-# main.py
+# building_by_building.py
 # Spring 2020
-# Central hub for openDSS controls, utilizes the base script for the project.
+# Run a building by building scan that looks for voltage and overload issues for specific buildings at given levels.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 import win32com.client
 import pickle
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
 from building import Building
 import combine_yearly
+import pandas
 
 
 if __name__ == '__main__':
@@ -47,11 +47,10 @@ if __name__ == '__main__':
             # Limit of loop iterations and graph domain
             limit = building.maxKW + 1
             increment = 25
-            ticks = [-25]
-            v = []
-            p = []
-            q = []
             building.set_kw(0)
+            overvoltage = []
+            undervoltage = []
+            overload = []
             for KW in range(0, limit, increment):
                 print(str(KW) + '/' + str(building.maxKW) + 'kW, ' + str(building.KW/building.maxKW * 100) + '%')
                 print('compiling base file...')
@@ -68,61 +67,35 @@ if __name__ == '__main__':
                 print('Solving and exporting data.')
                 dssText.Command = 'solve'
                 # Don't plot, just export
-                # dssText.Command = 'export monitor object=SubPQ channels=(1,2)'
-                # dssText.Command = 'export monitor object=SubVI channels = (1,3,5)'
                 dssText.Command = 'export monitor object=SubVI'
                 dssText.Command = 'export monitor object=SubPQ'
                 dssText.Command = 'closedi'
                 print('Importing, grooming, and collecting data.')
-                raw_values = open(path+'BallState\\Ball_State_Mon_subvi_1.csv', 'r').readlines()
-                v1 = []
-                for i in range(1, len(raw_values)):
-                    value = raw_values[i].split(',')
-                    v1.append(float(value[2]))
-                v.append(v1)
-                raw_values = open(path + 'BallState\\Ball_State_Mon_subpq_1.csv', 'r').readlines()
-                p1 = []
-                q1 = []
-                for i in range(1, len(raw_values)):
-                    value = raw_values[i].split(',')
-                    p1.append(float(value[2]))
-                    q1.append(float(value[3]))
-                p.append(p1)
-                q.append(q1)
-                ticks.append(building.KW)
-                load_max.append(np.max(v1[10:]))
-                load_min.append(np.min(v1[10:]))
-                load_mean.append(np.mean(v1[10:]))
+                # For individual buildings, we're only interested in overloads and over-volts
+                volt_except = pandas.read_csv(path + 'BallState\\Ball_State\\DI_yr_1\\DI_VoltExceptions_1.csv')
+                overvoltage.append(volt_except[' "Overvoltage"'].sum())
+                undervoltage.append(volt_except[' "Undervoltages"'].sum())
                 building.increment_solar(increment)
-
-            # TODO: Pull P and Q values, do the same boxplots
-            print('Plotting.')
-            # pickle.dump(v, open(path + '\\v' + solarDat[0:len(solarDat)-4] + '.pickle', 'wb'))
-            # Plot a scatter plot of max load volts vs PV penetration in kW
-            fig = plt.figure()
-            # plt.scatter(range(limit), load_max, color='blue')
-            # plt.scatter(range(limit), load_min, color='green')
-            # plt.scatter(range(limit), load_mean, color='orange')
-            plt.title('Substations voltage p.u. vs kW solar penetration (steps of 25)')
-            plt.xlabel('kW penetration')
-            # plt.ylabel('max voltage at substation p.u.')
-            # plt.grid()
-            plt.boxplot(v)
-            # plt.xticks(range(0, building.maxKW/increment), ticks)
-            # Plot the ansi voltage limit line
-            # plt.plot(range(limit), [1.05] * limit, color='red')
-            # plt.plot(range(limit), [.95] * limit, color='red')
-            # plt.legend(['ansi 105% voltage limit', 'ansi 95% voltage limit',  'Voltage maximums', 'Voltage minimums',
-            #             'Voltage Means'])
-            plt.savefig(path + '\\output' + building.name + solarDat[0:len(solarDat)-4] + '.png')
-            fig = plt.figure()
-            plt.title('Substation Power vs KW solar penetration (steps of 25)')
-            plt.xlabel('kW penetration')
-            plt.boxplot(p)
-            plt.savefig(path + '\\outputp' + building.name + solarDat[0:len(solarDat)-4] + '.png')
-            fig = plt.figure()
-            plt.title('Substation Imaginary Power vs KW solar penetration (steps of 25)')
-            plt.xlabel('kW penetration')
-            plt.boxplot(q)
-            plt.savefig(path + '\\outputq' + building.name + solarDat[0:len(solarDat) - 4] + '.png')
-            # plt.show()
+                overloads = pandas.read_csv(path + 'BallState\\Ball_State\\DI_yr_1\\DI_Overloads_1.csv')
+                overload.append(overloads[' "Element"'].loc[overloads[' "Element"'] != ' "Line.L9"'].sum())
+            plt.figure()
+            plt.scatter(np.arange(0, building.maxKW + increment, increment), overvoltage)
+            plt.grid()
+            plt.title('Count of overvolts at each 25 kW step of solar (' + building.name + ').')
+            plt.ylabel('Overvolt count')
+            plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Over_volts_' + building.name +
+                        solarDat[0:len(solarDat) - 4] + '.png')
+            plt.figure()
+            plt.scatter(np.arange(0, building.maxKW + increment, increment), undervoltage)
+            plt.grid()
+            plt.title('Count of undervolts at each 25 kW step of solar (' + building.name + ').')
+            plt.ylabel('Undervolt count')
+            plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Under_volts_' + building.name +
+                        solarDat[0:len(solarDat) - 4] + '.png')
+            plt.figure()
+            plt.scatter(np.arange(0, building.maxKW + increment, increment), overload)
+            plt.grid()
+            plt.title('Count of overloads at each 25 kW step of solar (' + building.name + ').\nExcludes Line.L9')
+            plt.ylabel('Overload count')
+            plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Overloads_' + building.name +
+                        solarDat[0:len(solarDat) - 4] + '.png')
