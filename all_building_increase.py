@@ -55,21 +55,21 @@ if __name__ == '__main__':
             dssText.Command = 'compile [' + fName + ']'
             dssText.Command = 'New Loadshape.PV_Shape npts=35040 minterval=15 csvfile=' + path + 'BallState\\' + \
                               solarDat
-            dssText.Command = 'New monitor.SubVI element=Transformer.SubXF terminal=2 mode=0'
-            dssText.Command = 'New monitor.SubPQ element=Transformer.SubXF terminal=1 mode=65 PPolar=No'
+            # dssText.Command = 'New monitor.SubVI element=Transformer.SubXF terminal=2 mode=0'
+            # dssText.Command = 'New monitor.SubPQ element=Transformer.SubXF terminal=1 mode=65 PPolar=No'
 
             for building in building_list:
                 print('Adding PV for: ' + building.name)
                 dssText.Command = 'New ' + building.name + ' phases=3 bus1=' + building.bus + ' kv=.48 kVA=' + \
                                   str(building.KW) + ' irradiance=1 Pmpp=' + str(building.KW * .8) \
                                   + ' pf=1 %cutin=.1 %cutout=.1 Yearly=PV_Shape'
-                # TODO Only increment solar IF there is space in the building cap
-                building.increment_solar(increment)
+                if building.maxKW > building.KW + increment:
+                    building.increment_solar(increment)
             print('Solving and exporting data.')
             dssText.Command = 'solve'
             # Don't plot, just export
-            dssText.Command = 'export monitor object=SubVI'
-            dssText.Command = 'export monitor object=SubPQ'
+            # dssText.Command = 'export monitor object=SubVI'
+            # dssText.Command = 'export monitor object=SubPQ'
             dssText.Command = 'closedi'
             steps += 1
             # As of this point, we have export data at increments of <increment> kW, added to all buildings

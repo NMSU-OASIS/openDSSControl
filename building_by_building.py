@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     # Load the buildings into building objects !! Needs to point to your file
     print('Loading the building solar information...')
-    buildings = pickle.load(open(path + 'emensOnly.pickle', 'rb'))
+    buildings = pickle.load(open(path + 'buildings.pickle', 'rb'))
     building_list = []
     for building in buildings.keys():
         building_list.append(Building(int(buildings[building]['kVA_max']), buildings[building]['Name'],
@@ -46,8 +46,8 @@ if __name__ == '__main__':
             load_mean = []
             # Limit of loop iterations and graph domain
             limit = building.maxKW + 1
-            start = 575
-            increment = 1
+            start = 0
+            increment = 5
             building.set_kw(0)
             overvoltage = []
             undervoltage = []
@@ -92,6 +92,7 @@ if __name__ == '__main__':
             plt.ylabel('Overvolt count')
             plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Over_volts_' + building.name +
                         solarDat[0:len(solarDat) - 4] + '.png')
+            plt.close()
             plt.figure()
             plt.scatter(range(start, start + steps * increment, increment), undervoltage)
             plt.grid()
@@ -99,6 +100,7 @@ if __name__ == '__main__':
             plt.ylabel('Undervolt count')
             plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Under_volts_' + building.name +
                         solarDat[0:len(solarDat) - 4] + '.png')
+            plt.close()
             plt.figure()
             plt.scatter(range(start, start + steps * increment, increment), overload)
             plt.grid()
@@ -106,3 +108,4 @@ if __name__ == '__main__':
             plt.ylabel('Overload count')
             plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Overloads_' + building.name +
                         solarDat[0:len(solarDat) - 4] + '.png')
+            plt.close()
