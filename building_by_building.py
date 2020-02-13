@@ -46,13 +46,16 @@ if __name__ == '__main__':
             load_mean = []
             # Limit of loop iterations and graph domain
             limit = building.maxKW + 1
-            increment = 25
+            start = 575
+            increment = 1
             building.set_kw(0)
             overvoltage = []
             undervoltage = []
             overload = []
             steps = 0
-            for KW in range(0, limit, increment):
+            if start != 0:
+                building.set_kw(start)
+            for KW in range(start, limit, increment):
                 print(str(KW) + '/' + str(building.maxKW) + 'kW, ' + str(building.KW/building.maxKW * 100) + '%')
                 print('compiling base file...')
                 dssText.Command = 'compile [' + fName + ']'
@@ -83,21 +86,21 @@ if __name__ == '__main__':
                 if ol_count > 0:
                     break
             plt.figure()
-            plt.scatter(range(0, steps * increment, increment), overvoltage)
+            plt.scatter(range(start, steps * increment, increment), overvoltage)
             plt.grid()
             plt.title('Count of overvolts at each 25 kW step of solar (' + building.name + ').')
             plt.ylabel('Overvolt count')
             plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Over_volts_' + building.name +
                         solarDat[0:len(solarDat) - 4] + '.png')
             plt.figure()
-            plt.scatter(range(0, steps * increment, increment), undervoltage)
+            plt.scatter(range(start, steps * increment, increment), undervoltage)
             plt.grid()
             plt.title('Count of undervolts at each 25 kW step of solar (' + building.name + ').')
             plt.ylabel('Undervolt count')
             plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Under_volts_' + building.name +
                         solarDat[0:len(solarDat) - 4] + '.png')
             plt.figure()
-            plt.scatter(range(0, steps * increment, increment), overload)
+            plt.scatter(range(start, steps * increment, increment), overload)
             plt.grid()
             plt.title('Count of overloads at each 25 kW step of solar (' + building.name + ').\nExcludes Line.L9')
             plt.ylabel('Overload count')
