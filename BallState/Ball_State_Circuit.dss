@@ -268,6 +268,11 @@ set DIVerbose=true
 set stepsize = 15m
 Set Year=1 Number= 35040
 
+!New Loadshape.PV_Shape npts=35040 minterval=15 csvfile=mean.csv
+!New PVSystem.Emens phases=3 bus1=Emens_structure_LV kV=.480 kVA=1408.8 Pmpp=1127.04 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=PV_Shape
+!New Loadshape.PV_Shape npts=35040 minterval=15 csvfile=C:\Users\rwoodall\PycharmProjects\openDSSControl\BallState\maximum.csv
+!New PVSystem.Emens phases=3 bus1=Emens_structure_LV kv=.48 kVA=0 irradiance=1 Pmpp=0.0 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_Shape
+
 !New monitor.subVI element=Transformer.SubXF terminal=2 mode=0
 !New PVSystem.Telecomms phases=3 bus1=Telecomms_2_LV 
 !New monitor.subPQ element=Transformer.SubXF terminal=1 mode=65 PPolar=No

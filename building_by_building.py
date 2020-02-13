@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     # Load the buildings into building objects !! Needs to point to your file
     print('Loading the building solar information...')
-    buildings = pickle.load(open(path + 'buildings.pickle', 'rb'))
+    buildings = pickle.load(open(path + 'emensOnly.pickle', 'rb'))
     building_list = []
     for building in buildings.keys():
         building_list.append(Building(int(buildings[building]['kVA_max']), buildings[building]['Name'],
@@ -51,49 +51,53 @@ if __name__ == '__main__':
             overvoltage = []
             undervoltage = []
             overload = []
+            steps = 0
             for KW in range(0, limit, increment):
                 print(str(KW) + '/' + str(building.maxKW) + 'kW, ' + str(building.KW/building.maxKW * 100) + '%')
                 print('compiling base file...')
                 dssText.Command = 'compile [' + fName + ']'
-                # dssText.Command = 'set mode=yearly'
                 print('Adding solar increments and monitors to the ' + building.name + ' building.')
                 dssText.Command = 'New Loadshape.PV_Shape npts=35040 minterval=15 csvfile=' + path + 'BallState\\' + \
                                   solarDat
                 dssText.Command = 'New ' + building.name + ' phases=3 bus1=' + building.bus + ' kv=.48 kVA=' + \
-                                  str(building.KW) + ' irradiance=1 Pmpp=' + str(building.maxKW * .8) \
+                                  str(building.KW) + ' irradiance=1 Pmpp=' + str(building.KW * .8) \
                                   + ' pf=1 %cutin=.1 %cutout=.1 Yearly=PV_Shape'
-                dssText.Command = 'New monitor.SubVI element=Transformer.SubXF terminal=2 mode=0'
-                dssText.Command = 'New monitor.SubPQ element=Transformer.SubXF terminal=1 mode=65 PPolar=No'
+                # dssText.Command = 'New monitor.SubVI element=Transformer.SubXF terminal=2 mode=0'
+                # dssText.Command = 'New monitor.SubPQ element=Transformer.SubXF terminal=1 mode=65 PPolar=No'
                 print('Solving and exporting data.')
                 dssText.Command = 'solve'
                 # Don't plot, just export
-                dssText.Command = 'export monitor object=SubVI'
-                dssText.Command = 'export monitor object=SubPQ'
+                # dssText.Command = 'export monitor object=SubVI'
+                # dssText.Command = 'export monitor object=SubPQ'
                 dssText.Command = 'closedi'
+                steps += 1
                 print('Importing, grooming, and collecting data.')
                 # For individual buildings, we're only interested in overloads and over-volts
-                volt_except = pandas.read_csv(path + 'BallState\\Ball_State\\DI_yr_1\\DI_VoltExceptions_1.csv')
+                volt_except = pandas.read_csv(path + 'BallState\\Ball_State\\DI_yr_1\\DI_VoltExceptions_1.CSV')
                 overvoltage.append(volt_except[' "Overvoltage"'].sum())
                 undervoltage.append(volt_except[' "Undervoltages"'].sum())
                 building.increment_solar(increment)
-                overloads = pandas.read_csv(path + 'BallState\\Ball_State\\DI_yr_1\\DI_Overloads_1.csv')
-                overload.append(overloads[' "Element"'].loc[overloads[' "Element"'] != ' "Line.L9"'].sum())
+                overloads = pandas.read_csv(path + 'BallState\\Ball_State\\DI_yr_1\\DI_Overloads_1.CSV')
+                ol_count = overloads[' "Element"'].loc[overloads[' "Element"'] != ' "Line.L9"'].count()
+                overload.append(ol_count)
+                if ol_count > 0:
+                    break
             plt.figure()
-            plt.scatter(np.arange(0, building.maxKW + increment, increment), overvoltage)
+            plt.scatter(range(0, steps * increment, increment), overvoltage)
             plt.grid()
             plt.title('Count of overvolts at each 25 kW step of solar (' + building.name + ').')
             plt.ylabel('Overvolt count')
             plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Over_volts_' + building.name +
                         solarDat[0:len(solarDat) - 4] + '.png')
             plt.figure()
-            plt.scatter(np.arange(0, building.maxKW + increment, increment), undervoltage)
+            plt.scatter(range(0, steps * increment, increment), undervoltage)
             plt.grid()
             plt.title('Count of undervolts at each 25 kW step of solar (' + building.name + ').')
             plt.ylabel('Undervolt count')
             plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Under_volts_' + building.name +
                         solarDat[0:len(solarDat) - 4] + '.png')
             plt.figure()
-            plt.scatter(np.arange(0, building.maxKW + increment, increment), overload)
+            plt.scatter(range(0, steps * increment, increment), overload)
             plt.grid()
             plt.title('Count of overloads at each 25 kW step of solar (' + building.name + ').\nExcludes Line.L9')
             plt.ylabel('Overload count')
