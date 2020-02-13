@@ -86,21 +86,21 @@ if __name__ == '__main__':
                 if ol_count > 0:
                     break
             plt.figure()
-            plt.scatter(range(start, steps * increment, increment), overvoltage)
+            plt.scatter(range(start, start + steps * increment, increment), overvoltage)
             plt.grid()
             plt.title('Count of overvolts at each 25 kW step of solar (' + building.name + ').')
             plt.ylabel('Overvolt count')
             plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Over_volts_' + building.name +
                         solarDat[0:len(solarDat) - 4] + '.png')
             plt.figure()
-            plt.scatter(range(start, steps * increment, increment), undervoltage)
+            plt.scatter(range(start, start + steps * increment, increment), undervoltage)
             plt.grid()
             plt.title('Count of undervolts at each 25 kW step of solar (' + building.name + ').')
             plt.ylabel('Undervolt count')
             plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Under_volts_' + building.name +
                         solarDat[0:len(solarDat) - 4] + '.png')
             plt.figure()
-            plt.scatter(range(start, steps * increment, increment), overload)
+            plt.scatter(range(start, start + steps * increment, increment), overload)
             plt.grid()
             plt.title('Count of overloads at each 25 kW step of solar (' + building.name + ').\nExcludes Line.L9')
             plt.ylabel('Overload count')
