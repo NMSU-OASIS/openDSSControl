@@ -250,7 +250,37 @@ new Load.Load_50 bus1=Student_recreation_LV model=1 kW=990.7 pf=0.95 Phases=3 kV
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 New Transformer.Tr52 buses=[Emens_Parking Emens_Parking_LV] xfmrcode=xfmr_990kVA
-New Line.L84 Bus1=Emens_Parking Bus2=Emens_Structure Units=ft LineCode=Amherst 
+New Line.L84 Bus1=Emens_Parking Bus2=Emens_Structure Length=100 Units=ft LineCode=Amherst 
+! Need ~2.5 MVA worth of transformer
+! Can implement with three of the 900 kVA transformers.
+! Use 1 elgin line even though it's overkill for lower losses
+! Using google maps for distance, 1.25 miles
+! Since we're going 1.25 miles, we're oversizing the line, amherst would work, because we want to get as much power as possible from A to B
+New Transformer.Tr53 buses=[ground_mount_1 ground_mount_LV_1] xfmrcode=xfmr_990kVA
+New Transformer.Tr54 buses=[ground_mount_2 ground_mount_LV_2] xfmrcode=xfmr_990kVA
+New Transformer.Tr55 buses=[ground_mount_3 ground_mount_LV_3] xfmrcode=xfmr_990kVA
+! Bus connecting lines
+New Line.L85 Bus1=ground_mount_1 Bus2=ground_mount_combiner Length=10 Units=ft LineCode=Amherst
+New Line.L86 Bus1=ground_mount_2 Bus2=ground_mount_combiner Length=10 Units=ft LineCode=Amherst
+New Line.L87 Bus1=ground_mount_3 Bus2=ground_mount_combiner Length=10 Units=ft LineCode=Amherst
+! Lines to substation
+New Line.L88 Bus1=ground_mount_combiner Bus2=bethel_1 Length=2270 Units=ft LineCode=Elgin
+New Line.L89 Bus1=bethel_1 Bus2=bethel_2 Length=2146 Units=ft LineCode=Elgin
+New Line.L90 Bus1=bethel_2 Bus2=substation Length=1800 Units=ft LineCode=Elgin
+! Need three balanced loads for the three transformers, all following the ground-mount shape
+New Loadshape.PV_ground_mount npts=35040 minterval=15 csvfile="synthesized_loads\Ground Mount Hourly_mod.csv"
+New PVSystem.ground_mount_1 phases=3 bus1=ground_mount_LV_1 kv=.480 kVA=867 Pmpp=693 irradiance=1 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_ground_mount
+New PVSystem.ground_mount_2 phases=3 bus1=ground_mount_LV_2 kv=.480 kVA=867 Pmpp=693 irradiance=1 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_ground_mount
+New PVSystem.ground_mount_3 phases=3 bus1=ground_mount_LV_3 kv=.480 kVA=867 Pmpp=693 irradiance=1 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_ground_mount
+!!!! add battery storage systems below
+
+New LoadShape.Battery npts=8760 minterval=60 csvfile=battery_load.csv
+
+ 
+
+New Storage.Battery phases=3 bus1=substation kv=12.47 kwrated=1800 conn=wye kwhrated=3500 debugtrace=no %Stored=100 enabled=yes
+
+~ DispMode=Follow yearly=Battery
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 New EnergyMeter.SubXF Transformer.SubXF
@@ -277,15 +307,33 @@ Set Year=1 Number= 35040
 
 
 
-New Loadshape.PV_Shape npts=35040 minterval=15 csvfile=mean.csv
+New Loadshape.Bracken_ npts=8760 minterval=60 csvfile="synthesized_loads\Bracken Hourly_mod.csv"
 
-New PVSystem.Emens phases=3 bus1=Emens_structure_LV kV=.480 kVA=200 Pmpp=160 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=PV_Shape
-New PVSystem.Emens_Parking phases=3 bus1=Emens_Parking_LV kVA=.480 kVA=900 irradiance=1 Pmpp=720 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_Shape
-New PVSystem.Business_College phases=3 bus1=Business_College_LV kVA=.480 kVA=163.2 irradiance=1 Pmpp=130.56 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_Shape
-New PVSystem.Library phases=3 bus1=Library_LV kVA=.480 kVA=108 irradiance=1 Pmpp=86.4 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_Shape
-New PVSystem.Noyer phases=3 bus1=Noyer_complex_LV kVA=.480 kVA=124.8 irradiance=1 Pmpp=99.84 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_Shape
-New PVSystem.Robert_Bell phases=3 bus1=Robert_bell_building_2_LV kVA=.480 kVA=162.4 irradiance=1 Pmpp=129.92 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_Shape
-New PVSystem.Telecomms phases=3 bus1=Telecomms_2_LV kVA=.480 kVA=400 irradiance=1 Pmpp=370 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_Shape
+New Loadshape.EmensA_ npts=8760 minterval=60 csvfile="synthesized_loads\Emens Auditorium Hourly_mod.csv"
+
+New Loadshape.EmensP_ npts=8760 minterval=60 csvfile="synthesized_loads\Emens Parking Hourly_mod.csv"
+
+New Loadshape.Noyer_ npts=8760 minterval=60 csvfile="synthesized_loads\Noyer Hourly_mod.csv"
+
+New Loadshape.RobertBell_ npts=8760 minterval=60 csvfile="synthesized_loads\Robert Bell Hourly_mod.csv"
+
+New Loadshape.Telecommunications_ npts=8760 minterval=60 csvfile="synthesized_loads\Telecommunications Hourly_mod.csv"
+
+New Loadshape.Whittinger_ npts=8760 minterval=60 csvfile="synthesized_loads\Whittinger Hourly_mod.csv"
+
+
+
+New PVSystem.EmensA phases=3 bus1=Emens_structure_LV kV=.480 kVA=1408.8 Pmpp=1127.04 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=EmensA_
+
+New PVSystem.Telecomms phases=3 bus1=Telecomms_2_LV kV=0.480 kVA=343.8 Pmpp=275.04 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Telecommunications_
+
+New PVSystem.Noyer phases=3 bus1=Noyer_complex_LV kV=.480 kVA=124.8 Pmpp=99.84 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Noyer_
+
+New PVSystem.Robert_Bell phases=3 bus1=Robert_bell_building_2_LV kV=0.480 kVA=162.4 irradiance=1 Pmpp=129.92 pf=1 %cutin=0.1 %cutout=0.1 Yearly=RobertBell_
+
+New PVSystem.Library phases=3 bus1=Library_LV kV=0.480 kVA=108 irradiance=1 Pmpp=86.4 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Bracken_
+
+New PVSystem.Business_College phases=3 bus1=Business_College_LV kV=0.480 kVA=163.2 irradiance=1 Pmpp=130.56 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Whittinger_
 
 set markPVsystems=yes
 
@@ -296,4 +344,5 @@ plot circuit
 set stepsize = 15m
 Set Year=1 Number= 35040
 solve mode = yearly
+plot monitor object =SubPQ channels =(1,2)
 export monitor object=SubPQ channels=(1,2)
