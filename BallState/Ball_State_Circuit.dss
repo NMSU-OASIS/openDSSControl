@@ -278,9 +278,7 @@ New LoadShape.Battery npts=8760 minterval=60 csvfile=battery_load.csv
 
  
 
-New Storage.Battery phases=3 bus1=substation kv=12.47 kwrated=1800 conn=wye kwhrated=3500 debugtrace=no %Stored=100 enabled=yes
-
-~ DispMode=Follow yearly=Battery
+New Storage.Battery phases=3 bus1=substation kv=12.47 kwrated=1800 conn=wye kwhrated=3500 debugtrace=no %Stored=100 enabled=yes DispMode=Follow yearly=Battery
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 New EnergyMeter.SubXF Transformer.SubXF
