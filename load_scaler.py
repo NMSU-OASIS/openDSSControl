@@ -7,7 +7,7 @@
 
 import pandas as pd
 
-kw_rated = 1800
+kw_rated = 2000
 kwh = 4000
 
 data = pd.read_csv('BallState/Ball_State_Mon_subpq_1.csv')

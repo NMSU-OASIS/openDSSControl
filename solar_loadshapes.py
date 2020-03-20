@@ -8,14 +8,16 @@
 import pandas as pd
 import numpy as np
 
-f_list = ['BallState/synthesized_loads/Bracken Hourly.csv',
-          'BallState/synthesized_loads/Emens Auditorium Hourly.csv',
-          'BallState/synthesized_loads/Emens Parking Hourly.csv',
+f_list = ['BallState/synthesized_loads/A&J Hourly.csv',
+          'BallState/synthesized_loads/Bracken Hourly.csv',
+          'BallState/synthesized_loads/David Letterman Hourly.csv',
+          'BallState/synthesized_loads/Emens Aud Hourly.csv',
+          'BallState/synthesized_loads/Emens Structure Hourly.csv',
           'BallState/synthesized_loads/Ground Mount Hourly.csv',
           'BallState/synthesized_loads/Noyer Hourly.csv',
           'BallState/synthesized_loads/Robert Bell Hourly.csv',
-          'BallState/synthesized_loads/Telecommunications Hourly.csv',
-          'BallState/synthesized_loads/Whittinger Hourly.csv']
+          'BallState/synthesized_loads/Telecomms Hourly.csv',
+          'BallState/synthesized_loads/Whitinger Hourly.csv']
 
 for f in f_list:
     data = pd.read_csv(f)

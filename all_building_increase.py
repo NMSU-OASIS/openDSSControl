@@ -52,8 +52,8 @@ if __name__ == '__main__':
         print(str(kW) + '/' + str(max_kw) + 'kW, ' + str(kW/max_kw * 100) + '%')
         print('compiling base file...')
         dssText.Command = 'compile [' + fName + ']'
-        dssText.Command = 'New Loadshape.PV_Shape npts=35040 minterval=15 csvfile=' + path + 'BallState\\' + \
-                          solarDat
+        # dssText.Command = 'New Loadshape.PV_Shape npts=35040 minterval=15 csvfile=' + path + 'BallState\\' + \
+        #                   solarDat
         # dssText.Command = 'New monitor.SubVI element=Transformer.SubXF terminal=2 mode=0'
         # dssText.Command = 'New monitor.SubPQ element=Transformer.SubXF terminal=1 mode=65 PPolar=No'
 
