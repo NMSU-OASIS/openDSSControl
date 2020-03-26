@@ -269,16 +269,16 @@ New Line.L89 Bus1=bethel_1 Bus2=bethel_2 Length=2146 Units=ft LineCode=Elgin
 New Line.L90 Bus1=bethel_2 Bus2=substation Length=1800 Units=ft LineCode=Elgin
 ! Need three balanced loads for the three transformers, all following the ground-mount shape
 New Loadshape.PV_ground_mount npts=35040 minterval=15 csvfile="synthesized_loads\Ground Mount Hourly_mod.csv"
-New PVSystem.ground_mount_1 phases=3 bus1=ground_mount_LV_1 kv=.480 kVA=737 Pmpp=693 irradiance=1 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_ground_mount
-New PVSystem.ground_mount_2 phases=3 bus1=ground_mount_LV_2 kv=.480 kVA=737 Pmpp=693 irradiance=1 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_ground_mount
-New PVSystem.ground_mount_3 phases=3 bus1=ground_mount_LV_3 kv=.480 kVA=737 Pmpp=693 irradiance=1 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_ground_mount
+!New PVSystem.ground_mount_1 phases=3 bus1=ground_mount_LV_1 kv=.480 kVA=737 Pmpp=693 irradiance=1 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_ground_mount
+!New PVSystem.ground_mount_2 phases=3 bus1=ground_mount_LV_2 kv=.480 kVA=737 Pmpp=693 irradiance=1 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_ground_mount
+!New PVSystem.ground_mount_3 phases=3 bus1=ground_mount_LV_3 kv=.480 kVA=737 Pmpp=693 irradiance=1 pf=1 %cutin=.1 %cutout=.1 Yearly=PV_ground_mount
 !!!! add battery storage systems below
 
 New LoadShape.Battery npts=8760 minterval=60 csvfile=battery_load.csv
 
  
 
-!New Storage.Battery phases=3 bus1=substation kv=12.47 kwrated=2400 conn=wye kwhrated=5100 debugtrace=no %Stored=100 enabled=yes DispMode=Follow yearly=Battery
+!New Storage.Battery phases=3 bus1=substation kv=12.47 kwrated=3000 conn=wye kwhrated=6000 debugtrace=no %Stored=100 enabled=yes DispMode=Follow yearly=Battery
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 New EnergyMeter.SubXF Transformer.SubXF
@@ -319,27 +319,26 @@ New Loadshape.Journalism_ npts=8760 minterval=60 csvfile="synthesized_loads\Davi
 
 
 
-New PVSystem.EmensA phases=3 bus1=Emens_Parking_LV kV=.480 kVA=897.5 Pmpp=790 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=EmensP_
-New PVSystem.Telecomms phases=3 bus1=Telecomms_2_LV kV=0.480 kVA=242.5 Pmpp=194 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Telecommunications_
-New PVSystem.Noyer phases=3 bus1=Noyer_complex_LV kV=.480 kVA=73.72 Pmpp=59 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Noyer_
-New PVSystem.Robert_Bell phases=3 bus1=Robert_bell_building_2_LV kV=0.480 kVA=126.11 irradiance=1 Pmpp=100 pf=1 %cutin=0.1 %cutout=0.1 Yearly=RobertBell_
-New PVSystem.Library phases=3 bus1=Library_LV kV=0.480 kVA=60.63 irradiance=1 Pmpp=49 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Bracken_
-New PVSystem.Business_College phases=3 bus1=Business_College_LV kV=0.480 kVA=121.25 irradiance=1 Pmpp=97 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Whittinger_
-New PVSystem.Emens_Aud phases=3 bus1=Emens_Structure_LV kV=0.480 kVA=121.25 irradiance=1 Pmpp=97 pf=1 %cutin=0.1 %cutout=0.1 Yearly=EmensA_
-New PVSystem.Arts phases=3 bus1=Art_museum_LV kV=0.480 kVA=97.4 irradiance=1 Pmpp=77.92 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Arts_
-!New PVSystem.Architecture phases=3 bus1=McKinley_structure_LV kV=0.480 kVA=39 irradiance=1 Pmpp=31.2 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Arts_
-New PVSystem.Letterman phases=3 bus1=Journalism_LV kV=0.480 kVA=60.63 irradiance=1 Pmpp=49 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Journalism_
+!New PVSystem.Emens phases=3 bus1=Emens_Parking_LV kV=.480 kVA=897.5 Pmpp=790 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=EmensP_
+!New PVSystem.Telecomms phases=3 bus1=Telecomms_2_LV kV=0.480 kVA=242.5 Pmpp=194 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Telecommunications_
+!New PVSystem.Noyer phases=3 bus1=Noyer_complex_LV kV=.480 kVA=73.72 Pmpp=59 irradiance=1 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Noyer_
+!New PVSystem.Robert_Bell phases=3 bus1=Robert_bell_building_2_LV kV=0.480 kVA=126.11 irradiance=1 Pmpp=100 pf=1 %cutin=0.1 %cutout=0.1 Yearly=RobertBell_
+!New PVSystem.Library phases=3 bus1=Library_LV kV=0.480 kVA=60.63 irradiance=1 Pmpp=49 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Bracken_
+!New PVSystem.Business_College phases=3 bus1=Business_College_LV kV=0.480 kVA=121.25 irradiance=1 Pmpp=97 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Whittinger_
+!New PVSystem.Emens_Aud phases=3 bus1=Emens_Structure_LV kV=0.480 kVA=121.25 irradiance=1 Pmpp=97 pf=1 %cutin=0.1 %cutout=0.1 Yearly=EmensA_
+!New PVSystem.Arts phases=3 bus1=Art_museum_LV kV=0.480 kVA=97.4 irradiance=1 Pmpp=77.92 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Arts_
+!New PVSystem.Letterman phases=3 bus1=Journalism_LV kV=0.480 kVA=60.63 irradiance=1 Pmpp=49 pf=1 %cutin=0.1 %cutout=0.1 Yearly=Journalism_
 
 
 
 set markPVsystems=yes
 
-solve mode=direct
-plot circuit
+!solve mode=direct
+!plot circuit
 
 
 set stepsize = 15m
 Set Year=1 Number= 35040
-solve mode = yearly
-plot monitor object =SubPQ channels =(1,2)
-export monitor object=SubPQ channels=(1,2)
+!solve mode = yearly
+!plot monitor object =SubPQ channels =(1,2)
+!export monitor object=SubPQ channels=(1,2)

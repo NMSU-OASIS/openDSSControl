@@ -8,11 +8,12 @@
 
 class Building:
     # Initialize a building with a maximum KW and a name.
-    def __init__(self, max_kw, name, bus):
+    def __init__(self, max_kw, name, bus, shape):
         self.maxKW = max_kw
         self.name = name
         self.KW = 0
         self.bus = bus
+        self.shape = shape
 
     # Set KW to a specific value if known.
     def set_kw(self, kw):

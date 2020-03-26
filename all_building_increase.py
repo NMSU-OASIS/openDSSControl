@@ -10,7 +10,7 @@ import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 from building import Building
-import combine_yearly
+# import combine_yearly
 import pandas
 
 if __name__ == '__main__':
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     circuit = dssObj.ActiveCircuit
 
     # Modify below to match your pathing and filename
-    path = 'C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\'
+    path = 'E:\\Github\\openDSSControl\\'
     fName = path + 'BallState\\Ball_State_Circuit.dss'
 
     # Load the buildings into building objects !! Needs to point to your file
@@ -35,13 +35,13 @@ if __name__ == '__main__':
     max_kw = 0
     for building in buildings.keys():
         building_list.append(Building(int(buildings[building]['kVA_max']), buildings[building]['Name'],
-                                      buildings[building]['bus1']))
+                                      buildings[building]['bus1'], buildings[building]['Yearly']))
         max_kw = max([max_kw, int(buildings[building]['kVA_max'])])
 
 
     # Loop by kW to add PV to every building
     limit = max_kw + 1
-    increment = 200
+    increment = 5
     # Integer division trick to make round by increment
     max_kw = max_kw // increment * increment
     overvoltage = []
@@ -61,7 +61,7 @@ if __name__ == '__main__':
             print('Adding PV for: ' + building.name)
             dssText.Command = 'New ' + building.name + ' phases=3 bus1=' + building.bus + ' kv=.48 kVA=' + \
                               str(building.KW) + ' irradiance=1 Pmpp=' + str(building.KW * .8) \
-                              + ' pf=1 %cutin=.1 %cutout=.1 Yearly=PV_Shape'
+                              + ' pf=1 %cutin=.1 %cutout=.1 Yearly=' + building.shape
             if building.maxKW > building.KW + increment:
                 building.increment_solar(increment)
         print('Solving and exporting data.')
@@ -85,21 +85,21 @@ if __name__ == '__main__':
     plt.figure()
     plt.scatter(range(0, steps * increment, increment), overvoltage)
     plt.grid()
-    plt.title('Count of overvolts at each 25 kW step of solar (all buildings).')
+    plt.title('Count of overvolts at each 5 kW step of solar (all buildings).')
     plt.ylabel('Overvolt count')
-    plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Over_volts_all' +
-                solarDat[0:len(solarDat) - 4] + '.png')
+    plt.savefig(path + 'Over_volts_all.png')
     plt.figure()
     plt.scatter(range(0, steps * increment, increment), undervoltage)
     plt.grid()
-    plt.title('Count of undervolts at each 25 kW step of solar (all buildings).')
+    plt.title('Count of undervolts at each 5 kW step of solar (all buildings).')
     plt.ylabel('Undervolt count')
-    plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Under_volts_all' +
-                solarDat[0:len(solarDat) - 4] + '.png')
+    plt.savefig(path + 'Under_volts_all.png')
     plt.figure()
     plt.scatter(range(0, steps * increment, increment), overload)
     plt.grid()
-    plt.title('Count of overloads at each 25 kW step of solar (all buildings).\nExcludes Line.L9')
+    plt.title('Count of overloads at each 5 kW step of solar (all buildings).\nExcludes Line.L9')
     plt.ylabel('Overload count')
-    plt.savefig('C:\\Users\\rwoodall\\PycharmProjects\\openDSSControl\\Overloads_' +
-                solarDat[0:len(solarDat) - 4] + '.png')
+    plt.savefig(path + 'Overloads_.png')
+
+    # Run the other script when donw
+    import building_by_building
