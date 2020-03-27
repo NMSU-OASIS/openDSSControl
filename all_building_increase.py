@@ -47,6 +47,8 @@ if __name__ == '__main__':
     overvoltage = []
     undervoltage = []
     overload = []
+    voltage_max = []
+    voltage_min = []
     steps = 0
     for kW in range(0, limit, increment):
         print(str(kW) + '/' + str(max_kw) + 'kW, ' + str(kW/max_kw * 100) + '%')
@@ -67,13 +69,16 @@ if __name__ == '__main__':
         print('Solving and exporting data.')
         dssText.Command = 'solve'
         # Don't plot, just export
-        # dssText.Command = 'export monitor object=SubVI'
+        dssText.Command = 'export monitor object=SubVI'
         # dssText.Command = 'export monitor object=SubPQ'
         dssText.Command = 'closedi'
         steps += 1
         # As of this point, we have export data at increments of <increment> kW, added to all buildings
         # Want to see: Overloads, Overvolts, Undervolts, Amount of power exported in a year, voltage min max and
         # mean
+        volts = pandas.read_csv(path + 'BallState\\Ball_State_Mon_subvi_1.csv')
+        voltage_max.append(max(volts[' V1'][10:]))
+        voltage_min.append(min(volts[' V1'][10:]))
         volt_except = pandas.read_csv(path + 'BallState\\Ball_State\\DI_yr_1\\DI_VoltExceptions_1.CSV')
         overvoltage.append(volt_except[' "Overvoltage"'].sum())
         undervoltage.append(volt_except[' "Undervoltages"'].sum())
@@ -100,6 +105,18 @@ if __name__ == '__main__':
     plt.title('Count of overloads at each 5 kW step of solar (all buildings).\nExcludes Line.L9')
     plt.ylabel('Overload count')
     plt.savefig(path + 'Overloads_.png')
+    plt.figure()
+    plt.scatter(range(0, steps * increment, increment), voltage_max)
+    plt.grid()
+    plt.title('Maximum substation voltage at each 5 kW step of solar (all buildings).\nExcludes Line.L9')
+    plt.ylabel('Voltage')
+    plt.savefig(path + 'max_volts.png')
+    plt.figure()
+    plt.scatter(range(0, steps * increment, increment), voltage_min)
+    plt.grid()
+    plt.title('Minimum substation voltage at each 5 kW step of solar (all buildings).\nExcludes Line.L9')
+    plt.ylabel('Voltage')
+    plt.savefig(path + 'min_volts.png')
 
     # Run the other script when donw
-    import building_by_building
+    # import building_by_building

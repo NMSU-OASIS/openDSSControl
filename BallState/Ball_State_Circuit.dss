@@ -278,7 +278,7 @@ New LoadShape.Battery npts=8760 minterval=60 csvfile=battery_load.csv
 
  
 
-!New Storage.Battery phases=3 bus1=substation kv=12.47 kwrated=3000 conn=wye kwhrated=6000 debugtrace=no %Stored=100 enabled=yes DispMode=Follow yearly=Battery
+!New Storage.Battery phases=3 bus1=substation kv=12.47 kwrated=3000 conn=wye kwhrated=6750 debugtrace=no %Stored=100 enabled=yes DispMode=Follow yearly=Battery
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 New EnergyMeter.SubXF Transformer.SubXF
@@ -291,6 +291,7 @@ New monitor.MPCC2 element=Line.L83 mode=0
 New monitor.MPCC3 element=Line.L1 mode=1
 New monitor.MPCC4 element=Line.L83 mode=1
 New monitor.subPQ element=Transformer.SubXF terminal=1 mode=65 PPolar=No
+New monitor.subVI element=Transformer.SubXF terminal=2 mode=0
 
 set controlmode=time
 set mode=yearly
@@ -333,12 +334,13 @@ New Loadshape.Journalism_ npts=8760 minterval=60 csvfile="synthesized_loads\Davi
 
 set markPVsystems=yes
 
-!solve mode=direct
+solve mode=direct
 !plot circuit
 
 
 set stepsize = 15m
 Set Year=1 Number= 35040
+set mode = yearly
 !solve mode = yearly
 !plot monitor object =SubPQ channels =(1,2)
-!export monitor object=SubPQ channels=(1,2)
+export monitor object=SubPQ channels=(1,2)
