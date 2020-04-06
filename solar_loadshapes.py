@@ -17,7 +17,8 @@ f_list = ['BallState/synthesized_loads/A&J Hourly.csv',
           'BallState/synthesized_loads/Noyer Hourly.csv',
           'BallState/synthesized_loads/Robert Bell Hourly.csv',
           'BallState/synthesized_loads/Telecomms Hourly.csv',
-          'BallState/synthesized_loads/Whitinger Hourly.csv']
+          'BallState/synthesized_loads/Whitinger Hourly.csv',
+          'BallState/synthesized_loads/Architecture Hourly.csv']
 
 for f in f_list:
     data = pd.read_csv(f)
