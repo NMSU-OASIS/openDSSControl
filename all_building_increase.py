@@ -15,6 +15,10 @@ import pandas
 
 if __name__ == '__main__':
 
+    import os
+    path = os.getcwd() + '\\'
+    print(path)
+
     # Open a link to the OpenDSS and start, print version to prove running.
     dssObj = win32com.client.Dispatch('OpenDSSEngine.DSS')
     dssObj.start(0)
@@ -25,7 +29,7 @@ if __name__ == '__main__':
     circuit = dssObj.ActiveCircuit
 
     # Modify below to match your pathing and filename
-    path = 'E:\\Github\\openDSSControl\\'
+    # path = 'E:\\Github\\openDSSControl\\'
     fName = path + 'BallState\\Ball_State_Circuit.dss'
 
     # Load the buildings into building objects !! Needs to point to your file
@@ -72,6 +76,9 @@ if __name__ == '__main__':
             dssText.Command = 'set number = 1'
             for _ in range(35040):
                 dssText.Command = 'solve'
+                dssText.Command = 'export voltages'
+                voltages = pandas.read_csv('Ball_State_EXP_VOLTAGES.CSV')
+                print(voltages)
             # Don't plot, just export
             dssText.Command = 'export monitor object=SubVI'
             # dssText.Command = 'export monitor object=SubPQ'
