@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
         # Loop by kW to add PV to every building
         limit = max_kw + 1
-        increment = 5
+        increment = 800
         # Integer division trick to make round by increment
         max_kw = max_kw // increment * increment
         overvoltage = []
@@ -56,6 +56,10 @@ if __name__ == '__main__':
         voltage_max = []
         voltage_min = []
         steps = 0
+        voltage_mins_secondaries = []
+        voltage_maxes_secondaries = []
+        voltage_mins_primaries = []
+        voltage_maxes_primaries = []
         for kW in range(0, limit, increment):
             print(str(kW) + '/' + str(max_kw) + 'kW, ' + str(kW/max_kw * 100) + '%')
             print('compiling base file...')
@@ -73,12 +77,43 @@ if __name__ == '__main__':
                 if building.maxKW > building.KW + increment:
                     building.increment_solar(increment)
             print('Solving and exporting data.')
-            dssText.Command = 'set number = 1'
-            for _ in range(35040):
+            steps = 4
+            dssText.Command = 'set number = ' + str(steps)
+            voltages_secondaries = []
+            voltages_primaries = []
+            for i in range(int(35040/steps)):
+                print(str(i/35040*steps*100) + '% complete (' + str(i) + '/' + str(35040/steps) + ')')
                 dssText.Command = 'solve'
+                import time
+                time.sleep(.25)
                 dssText.Command = 'export voltages'
-                voltages = pandas.read_csv('Ball_State_EXP_VOLTAGES.CSV')
-                print(voltages)
+                voltages_import = pandas.read_csv('Ball_State_EXP_VOLTAGES.CSV')
+                # Collect all values for pu1 every year and then find min/max
+                voltages_secondaries.append(voltages_import.loc[voltages_import['Bus'].str.contains('LV')][' pu1'].values)
+                voltages_primaries.append(voltages_import.loc[~voltages_import['Bus'].str.contains('LV')][' pu1'].values)
+                pandas.DataFrame(voltages_secondaries).to_csv(path+'secondaries.csv', header=False, index=False)
+                pandas.DataFrame(voltages_primaries).to_csv(path+'primaries.csv', header=False, index=False)
+            # Transpose so each row is a bus
+            primaries_transposed = np.transpose(voltages_secondaries)
+            secondaries_transposed = np.transpose(voltages_primaries)
+            # now pull the max and min from this penetration for each bus we want each row of this new matrix to be one
+            # set of buses.
+            maxes = []
+            mins = []
+            for bus in primaries_transposed:
+                maxes.append(np.max(bus))
+                mins.append(np.min(bus))
+            # Add rows
+            voltage_maxes_primaries.extend([maxes])
+            voltage_mins_primaries.extend([mins])
+            maxes = []
+            mins = []
+            for bus in secondaries_transposed:
+                maxes.append(np.max(bus))
+                maxes.append(np.min(bus))
+            voltage_maxes_secondaries.extend([maxes])
+            voltage_mins_secondaries.extend([mins])
+
             # Don't plot, just export
             dssText.Command = 'export monitor object=SubVI'
             # dssText.Command = 'export monitor object=SubPQ'
@@ -98,6 +133,15 @@ if __name__ == '__main__':
             overload.append(ol_count)
             if ol_count > 0:
                 break
+        # Let's plot the primary and secondary mins/maxes over the year
+        plt.figure()
+        pickle.dump(voltage_mins_secondaries, open('secondary_mins.pickle', 'wb'))
+        pickle.dump(voltage_maxes_secondaries, open('secondary_maxes.pickle', 'wb'))
+        pickle.dump(voltage_mins_primaries, open('primary_mins.pickle', 'wb'))
+        pickle.dump(voltage_maxes_primaries, open('primary_maxes.pickle', 'wb'))
+        plt.scatter(range(0, steps * increment, increment), voltage_mins_secondaries, color='red')
+        plt.scatter(range(0, steps * increment, increment), voltage_maxes_secondaries, color='blue')
+        plt.show()
         plt.figure()
         plt.scatter(range(0, steps * increment, increment), overvoltage)
         pandas.DataFrame(overvoltage).to_csv('overvoltage' + str(multiplier) + '.csv', header=False, index=False)
