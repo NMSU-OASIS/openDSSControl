@@ -26,7 +26,7 @@ circuit = dssObj.ActiveCircuit
 
 # Modify below to match your pathing and filename
 path = 'E:\\Github\\openDSSControl\\'
-fName = path + 'BallState\\Ball_State_Circuit.dss'
+fName = path + 'BallState\\Ball_State_Circuit_Python.dss'
 
 # Load the buildings into building objects !! Needs to point to your file
 print('Loading the building solar information...')
