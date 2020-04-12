@@ -11,10 +11,10 @@ import matplotlib.pyplot as plt
 plt.rcParams.update({'font.size': 22})
 
 # Import all data (1.0 multiplier only for now).
-primax = pandas.read_csv('E:\\Github\\openDSSControl\\BallState\\primary_maxes_1.csv')
-primin = pandas.read_csv('E:\\Github\\openDSSControl\\BallState\\primary_mins_1.csv')
-secmax = pandas.read_csv('E:\\Github\\openDSSControl\\BallState\\secondary_maxes_1.csv')
-secmin = pandas.read_csv('E:\\Github\\openDSSControl\\BallState\\secondary_mins_1.csv')
+primax = pandas.read_csv('BallState\\primary_maxes_1.csv')
+primin = pandas.read_csv('BallState\\primary_mins_1.csv')
+secmax = pandas.read_csv('BallState\\secondary_maxes_1.csv')
+secmin = pandas.read_csv('BallState\\secondary_mins_1.csv')
 
 # Plot primaries as red dots, secondaries as blue dots?
 for column in primax.columns:
